@@ -130,10 +130,10 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <video poster="" id="tree" autoplay controls muted loop width="1265" height="843">
-        <source src="static/videos/CartPole.mp4" type="video/mp4">
+        <source src="static/videos/cartpole.mp4" type="video/mp4">
       </video>
       <h4 class="subtitle has-text-centered">
-        CartPole system trained to stabilize the pole upright from vision inputs.
+        CartPole system with modified buffer stabilizing the pole upright from vision inputs compared to unmodified buffer.
       </h4>
     </div>
   </div>
@@ -169,30 +169,39 @@
       <div class="column is-8">
         <div class="content has-text-justified">
           <p>
-            Most safe RL works rely on reward shaping to discourage violations of a safety constraint.
-            However, such <em>soft constraints</em> do not guarantee safety.
-            Previous works trying to enforce <em>hard constraints</em> in RL typical suffer from two limitations:
-            either they need an accurate model of the environment, or their learned safety certificate only approximate without guarantees an actual safety certificate.
+            We extend the POLICEd RL approach to ensure that the policy maintains safety guaranteed with image inputs instead of state inputs by modifying the affine region to account 
+            for error in state estimation from images. Doing so can at times lead to the creation of a large affine region which can limit the generalisability of the network. 
           </p>
           <p> 
-            On the other hand, our <strong>POLICEd RL</strong> approach can provably enforce hard constraint satisfaction in closed-loop with a black-box environment.
-            We build a repulsive buffer region in front of the constraint to prevent trajectories from approaching it.
-            Since trajectories cannot cross this buffer, they also cannot violate the constraint.
+            To solve this we use switched actors which allow us to define multiple affine regions. Thus we can break the large affine region into multiple smaller regions. At the same time 
+            using proojected gradient descent alongside switched actors allows us to guarantee hard constraints even during the training process.
           </p>
 	</div>	
-        <img src="static/images/schema.png" alt="POLICEd RL illustration" style="height:300px !important; display:block !important; margin:auto !important;"/>
+  
+        <img src="static/images/training.gif" alt="POLICEd RL illustration" style="height:300px !important; display:block !important; margin:auto !important;"/>
 	<div class="content has-text-justified">
           <p>
-            Schematic illustration of POLICEd RL. To prevent state $s$ from violating an affine constraint represented by $Cs \leq d$,
-            our POLICEd policy (arrows in the environment) enforces $C\dot s \leq 0$ in buffer region $\mathcal{B}$ (<strong><span style="color:LightSeaGreen;">blue</span></strong>) directly below
-            the unsafe area (<strong><span style="color:PaleVioletRed;">red</span></strong>).
-            We use the <a href="#POLICE">POLICE</a> algorithm to make our policy affine inside buffer region $\mathcal{B}$,
-            which allows us to easily verify whether trajectories can violate the constraint.
+            Schematic illustration of training of switched actor with projected gradient descent ensuring constraint satisfaction throughout training.
           </p>
+          <br><br>
+          <p>
+            We also extend the framework to non affine constraints by augemnting the state space with the non affine constraint allowing us to transform the non affine constraint into an 
+            affine constraint 
+          </p>
+        <img src="static/images/linearcircle.png" alt="POLICEd RL illustration" style="height:300px !important; display:block !important; margin:auto !important;"/>
+	<div class="content has-text-justified">
+          <p style="text-align:center">
+            Schematic illustration of switched actors with a non affine circular constraint.
+          </p>
+        </div>
         </div>
       </div>
     </div>
   </div>
+
+
+
+
 </section>
 
 
@@ -200,8 +209,9 @@
 
 
 
-  
+
 <!-- Image carousel -->
+<!-- section comment>
 <section class="hero is-light">
   <div class="hero-body">
     <div class="container">
@@ -255,6 +265,7 @@
 </div>
 </div>
 </section>
+</section-->
 <!-- End image carousel -->
 
 <!--section class="section hero is-small">
@@ -281,7 +292,7 @@
       </div>
     </div>
   </div>
-</section-->
+<-->
 
 
 <!-- Presentation video-->
